@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'
 import {useState} from "react";
+import {GestureHandlerRootView} from "react-native-gesture-handler";
 
 import ImageViewer from "./components/ImageViewer";
 import Button from './components/Button';
@@ -45,11 +46,12 @@ export default function App() {
     const onSaveImageAsync = async () =>{};
 
     return (
-        <View style={styles.container}>
-            <View style={styles.imageContainer}>
-                <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage}/>
-                {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />}
-            </View>
+        <GestureHandlerRootView style={styles.container}>
+            <View style={styles.container}>
+                <View style={styles.imageContainer}>
+                    <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage}/>
+                    {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />}
+                </View>
                 {showAppOptions ? (
                     <View style={styles.optionsContainer}>
                         <View style={styles.optionsRow}>
@@ -64,11 +66,12 @@ export default function App() {
                         <Button label="Use this pic" onPress={() => setSelectedImage(true)}/>
                     </View>
                 )}
-            <EmojiPicker isVisible={isModelVisible} onClose={onModelclose}>
-                <EmojiList onSelect={setPickedEmoji} onCloseModal={onModelclose} />
-            </EmojiPicker>
-            <StatusBar style="auto"/>
-        </View>
+                <EmojiPicker isVisible={isModelVisible} onClose={onModelclose}>
+                    <EmojiList onSelect={setPickedEmoji} onCloseModal={onModelclose} />
+                </EmojiPicker>
+                <StatusBar style="auto"/>
+            </View>
+        </GestureHandlerRootView>
     );
 }
 
