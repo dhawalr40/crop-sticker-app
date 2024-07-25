@@ -56,7 +56,6 @@ export default function App() {
         if (Platform.OS !== 'web') {
             try {
                 const localUri = await captureRef(imageRef, {
-                    height: 440,
                     quality: 1,
                 });
                 await MediaLibrary.saveToLibraryAsync(localUri);
@@ -89,7 +88,7 @@ export default function App() {
             <View style={styles.container}>
                 <View ref={imageRef} collapsable={false} style={styles.imageContainer}>
                     <ImageViewer placeholderImageSource={PlaceholderImage} selectedImage={selectedImage}/>
-                    {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji} />}
+                    {pickedEmoji && <EmojiSticker imageSize={250} stickerSource={pickedEmoji} />}
                 </View>
                 {showAppOptions ? (
                     <View style={styles.optionsContainer}>

@@ -1,9 +1,8 @@
 import { View, Image } from 'react-native';
-import {Gesture, GestureDetector} from "react-native-gesture-handler";
-import Animated , { useAnimatedStyle, useSharedValue, withSpring} from 'react-native-reanimated';
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
-
-export default function EmojiSticker({imageSize, stickerSource}) {
+export default function EmojiSticker({ imageSize, stickerSource }) {
 
     const translateX = useSharedValue(0);
     const translateY = useSharedValue(0);
@@ -11,9 +10,11 @@ export default function EmojiSticker({imageSize, stickerSource}) {
 
     const doubleTap = Gesture.Tap()
         .numberOfTaps(2)
-        .onStart(()=>{
-            if (scaleImage.value !== imageSize *2) {
-                scaleImage.value = scaleImage.value * 2;
+        .onStart(() => {
+            if (scaleImage.value !== imageSize * 2) {
+                scaleImage.value = imageSize * 2;
+            } else {
+                scaleImage.value = imageSize;
             }
         });
 
@@ -23,27 +24,32 @@ export default function EmojiSticker({imageSize, stickerSource}) {
             translateY.value += event.changeY;
         });
 
+
+    const pinch = Gesture.Pinch()
+        .onUpdate((event) => {
+            scaleImage.value = withSpring(imageSize * event.scale);
+        });
+
     const containerStyle = useAnimatedStyle(() => {
         return {
             transform: [
-                { translateX: translateX.value, },
-                { translateY: translateY.value, },],
+                { translateX: translateX.value },
+                { translateY: translateY.value },
+            ],
         };
     });
 
     const imageStyle = useAnimatedStyle(() => {
         return {
-            width: withSpring(scaleImage?.value),
-            height: withSpring(scaleImage?.value),
+            width: withSpring(scaleImage.value),
+            height: withSpring(scaleImage.value),
         };
     });
 
-
-
-    return(
+    return (
         <GestureDetector gesture={drag}>
             <Animated.View style={[containerStyle, { top: -350 }]}>
-                <GestureDetector gesture={doubleTap}>
+                <GestureDetector gesture={Gesture.Simultaneous(doubleTap, pinch)}>
                     <Animated.Image
                         source={stickerSource}
                         resizeMode="contain"
